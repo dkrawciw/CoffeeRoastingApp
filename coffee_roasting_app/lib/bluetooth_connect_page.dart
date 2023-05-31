@@ -1,3 +1,4 @@
+import 'package:coffee_roasting_app/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,10 +22,11 @@ class _BluetoothConnectPageState extends State<BluetoothConnectPage> {
     await flutterBlue.startScan(timeout: const Duration(seconds: 2));
 
     flutterBlue.scanResults.listen((results) {
-      deviceList = results;
+      deviceList =
+          results.where((element) => element.device.name != "").toList();
     });
 
-    flutterBlue.stopScan();
+    await flutterBlue.stopScan();
 
     setState(() {
       isScanning = false;
@@ -71,6 +73,56 @@ class _BluetoothConnectPageState extends State<BluetoothConnectPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               if (isScanning) const CircularProgressIndicator(),
+              if (!isScanning && deviceList.isNotEmpty)
+                ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index) {
+                    return BluetoothDeviceButton(
+                      btText: deviceList[index].device.name,
+                    );
+                  },
+                  itemCount: deviceList.length,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class BluetoothDeviceButton extends StatelessWidget {
+  const BluetoothDeviceButton({super.key, required this.btText});
+
+  final String btText;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
+      },
+      child: Card(
+        color: const Color.fromARGB(255, 252, 68, 15),
+        elevation: 5,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            children: [
+              const SizedBox(
+                width: 20,
+              ),
+              Text(
+                btText,
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
             ],
           ),
         ),
