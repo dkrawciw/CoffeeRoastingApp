@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      color: Color.fromARGB(255, 252, 68, 15),
       debugShowCheckedModeBanner: false,
       home: HomePage(),
     );

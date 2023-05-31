@@ -51,22 +51,18 @@ class HomePageIcon extends StatelessWidget {
       //   ),
       // ),
       alignment: Alignment.center,
-      child: Container(
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: Color.fromARGB(255, 252, 68, 15),
-            ),
-            top: BorderSide(
-              color: Color.fromARGB(255, 252, 68, 15),
-            ),
-          ),
-        ),
+      child: Expanded(
         child: Text(
-          'Cafe-Connect',
-          style: GoogleFonts.playfairDisplay(
+          'CafeConnect',
+          style: GoogleFonts.dancingScript(
+            shadows: [
+              const Shadow(
+                color: Color.fromARGB(255, 252, 68, 15),
+                offset: Offset(2, 2),
+              ),
+            ],
             color: Colors.white,
-            fontSize: 30,
+            fontSize: 50,
             fontWeight: FontWeight.w900,
             letterSpacing: 5,
           ),
@@ -117,7 +113,7 @@ class HomePageButton extends StatelessWidget {
               ),
               Text(
                 btnText,
-                style: GoogleFonts.montserrat(
+                style: GoogleFonts.poppins(
                   color: Colors.white,
                   fontSize: 24,
                 ),
