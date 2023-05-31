@@ -107,7 +107,7 @@ class BluetoothDeviceButton extends StatelessWidget {
         );
       },
       child: Card(
-        color: const Color.fromARGB(255, 252, 68, 15),
+        color: const Color.fromARGB(255, 5, 142, 217),
         elevation: 5,
         child: Padding(
           padding: const EdgeInsets.all(10),

@@ -94,7 +94,7 @@ class HomePageButton extends StatelessWidget {
         );
       },
       child: Card(
-        color: const Color.fromARGB(255, 252, 68, 15),
+        color: const Color.fromARGB(255, 5, 142, 217),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4.0),
         ),
