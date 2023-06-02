@@ -54,7 +54,7 @@ class HomePageIcon extends StatelessWidget {
       child: Expanded(
         child: Text(
           'CafeConnect',
-          style: GoogleFonts.dancingScript(
+          style: GoogleFonts.poppins(
             shadows: [
               const Shadow(
                 color: Color.fromARGB(255, 252, 68, 15),

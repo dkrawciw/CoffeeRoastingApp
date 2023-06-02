@@ -1,4 +1,5 @@
 import 'package:coffee_roasting_app/home_page.dart';
+import 'package:coffee_roasting_app/roast_home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,21 +13,29 @@ class BluetoothConnectPage extends StatefulWidget {
 
 class _BluetoothConnectPageState extends State<BluetoothConnectPage> {
   FlutterBluePlus flutterBlue = FlutterBluePlus.instance;
-  List<ScanResult> deviceList = [];
+  Set<ScanResult> deviceList = {};
   bool isScanning = false;
 
   scanDevices() async {
     setState(() {
       isScanning = true;
     });
-    await flutterBlue.startScan(timeout: const Duration(seconds: 2));
 
-    flutterBlue.scanResults.listen((results) {
-      deviceList =
-          results.where((element) => element.device.name != "").toList();
-    });
+    for (int i = 0; i < 2; i++) {
+      await flutterBlue.startScan(timeout: const Duration(seconds: 2));
 
-    await flutterBlue.stopScan();
+      flutterBlue.scanResults.listen((results) {
+        for (ScanResult r in results) {
+          if (r.device.name.isNotEmpty) {
+            setState(() {
+              deviceList.add(r);
+            });
+          }
+        }
+      });
+
+      await flutterBlue.stopScan();
+    }
 
     setState(() {
       isScanning = false;
@@ -44,18 +53,18 @@ class _BluetoothConnectPageState extends State<BluetoothConnectPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 252, 68, 15),
-        actions: [
-          TextButton(
-            onPressed: scanDevices,
-            child: Text(
-              'Scan',
-              style: GoogleFonts.poppins(
-                color: Colors.white,
-                fontSize: 20,
-              ),
-            ),
-          ),
-        ],
+        // actions: [
+        //   TextButton(
+        //     onPressed: scanDevices,
+        //     child: Text(
+        //       'Scan',
+        //       style: GoogleFonts.poppins(
+        //         color: Colors.white,
+        //         fontSize: 20,
+        //       ),
+        //     ),
+        //   ),
+        // ],
         title: Text(
           'Bluetooth Devices',
           style: GoogleFonts.poppins(
@@ -72,18 +81,18 @@ class _BluetoothConnectPageState extends State<BluetoothConnectPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (isScanning) const CircularProgressIndicator(),
-              if (!isScanning && deviceList.isNotEmpty)
+              if (deviceList.isNotEmpty)
                 ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
                     return BluetoothDeviceButton(
-                      btText: deviceList[index].device.name,
+                      btText: deviceList.elementAt(index).device.name,
                     );
                   },
                   itemCount: deviceList.length,
                 ),
+              if (isScanning) const CircularProgressIndicator(),
             ],
           ),
         ),
@@ -103,7 +112,9 @@ class BluetoothDeviceButton extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(
+            builder: (context) => const RoastHomePage(),
+          ),
         );
       },
       child: Card(
